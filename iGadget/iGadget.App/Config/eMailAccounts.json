@@ -1,0 +1,12 @@
+{
+    "MailAccounts": {
+        "not@leaking.this": {
+            "Server": "mail.example.org",
+            "Port": 587,
+            "TLS": true,
+            "From": "Not Leaking This Login <not@leaking.this",
+            "User": "not@leaking.this",    
+            "Password": "lolno"
+        }
+    }
+}

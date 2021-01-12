@@ -1,0 +1,469 @@
+<html>
+	<head>
+			<title>iGadget</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+
+			<script src="mustache.min.js"></script>
+
+			<script src="jquery-3.3.1.min.js"></script>
+
+			<script src="imagesloaded.pkgd.min.js"></script>
+
+			<script src="packery.pkgd.min.js"></script>
+
+			<script src="bootstrap.min.js"></script>
+			<link rel="stylesheet" href="bootstrap.min.css" />
+
+			<script src="jquery-ui.min.js"></script>
+			<link rel="stylesheet" href="jquery-ui.min.css" />
+
+			<script type="text/javascript">
+				window.backgrounds = [
+					"2012-08-08 at 11-38-07.jpg",
+					"2010-11-05 at 12-10-51.jpg",
+					"2012-08-08 at 09-51-39.jpg",
+					"2012-08-09 at 12-26-59.jpg",
+					"2010-11-06 at 15-03-36.jpg",
+					"2010-10-24 at 15-50-10.jpg",
+					"2010-10-24 at 15-21-39.jpg",
+					"2012-08-08 at 11-46-09.jpg",
+					"2012-08-08 at 11-45-58.jpg",
+					"2010-11-06 at 11-36-56.jpg",
+					"2012-08-08 at 12-12-49.jpg",
+					"2012-08-08 at 13-45-04.jpg",
+					"2010-11-06 at 14-53-21.jpg",
+					"2010-10-24 at 12-21-09.jpg",
+					"2010-10-24 at 15-21-52.jpg",
+					"2012-08-08 at 11-02-54.jpg",
+					"2011-11-12 at 07-19-13.jpg",
+					"2015-12-19 at 13-47-20.jpg"
+				];
+
+				$(function() {
+					var randomNumber = Math.floor(Math.random() * window.backgrounds.length);
+					var url = 'backgrounds/' + window.backgrounds[randomNumber];
+					var img = new Image();
+					img.src = url;
+					img.onload = function() {
+						document.body.style.backgroundImage = 'url(\'' + url + '\')';
+					};
+					
+					$.getJSON('/api/rss', function(rss) {
+						render(rss, 'rssFeed', 'Engadget', 'iGadgetBox1');
+						render(rss, 'rssFeed', 'Slashdot', 'iGadgetBox2');
+						render(rss, 'rssFeed', 'Wired', 'iGadgetBox3');
+						render(rss, 'rssFeed', 'Zerohedge', 'iGadgetBox4');
+						render(rss, 'rssFeed', 'The Register', 'iGadgetBox5');
+
+						render(rss, 'rssFeed', 'Fark', 'iGadgetBox6');
+						render(rss, 'rssFeed', 'Ars Technica', 'iGadgetBox7');
+						render(rss, 'rssFeed', 'NPR', 'iGadgetBox8');
+						render(rss, 'rssFeed', 'Fox News', 'iGadgetBox9');
+						render(rss, 'rssFeed', 'Marketwatch', 'iGadgetBox10');
+
+						render(rss, 'rssFeed', 'NHC - Atlantic', 'iGadgetBox13');
+						render(rss, 'rssFeed', 'Hacker News', 'iGadgetBox14');
+					});
+
+					$.getJSON('/api/weather', function(weather) {
+						render(weather, 'nwsForecast', 'Jacksonville', 'iGadgetBox11');
+						render(weather, 'nwsForecast', 'Brevard', 'iGadgetBox12');
+					});
+										
+					$.getJSON('/api/comics', function(data) {
+						var comicBox = $("#column_4");
+						$.each(data, function(idx, item) {
+							var id = 'iGadgetBox4_' + idx;
+							comicBox.append('<div id="' + id + '" class="iGadgetBox"></div>');
+							var model = {
+								'name': item.name,
+								'url': item.url,
+								'date': item.comics != null && item.comics.length > 0 ? new Date(item.comics[0].downloadedDate).toLocaleDateString() : '',
+								'title': item.comics != null && item.comics.length > 0 ? item.comics[0].title : '',
+								'alt': item.comics != null && item.comics.length > 0 ? item.comics[0].alt : '',
+								'src': item.comics != null && item.comics.length > 0 ? '/api/images/' + item.comics[0].recommendedFileName : '',
+								'content': function() {
+									return Mustache.render($("#comic").html(), this);
+								},
+								'comics': item.comics
+							};
+							document.getElementById(id).innerHTML = Mustache.render($("#iGadgetBox").html(), model);
+							$("#" + id + " .comic").data('index', 0);
+							$("#" + id + " .comic").data('comics', model.comics);
+							if (item.comics != null && item.comics.length > 1) {
+								$("#" + id + " .comic .topLine .previous").removeAttr('disabled').css({ 'cursor': '', 'color': '' });
+							}
+						});
+					}).then(function() {
+						$(".comic .topLine .previous").click(function (e) {
+							var $this = $(this);
+							var $comic = $this.closest(".comic");
+
+							var img = $comic.find('img');
+							var next = $comic.find(".topLine .next");
+							var date = $comic.find('.date');
+
+							var index = $comic.data('index');
+							var comics = $comic.data('comics');
+
+							if (index == (comics.length - 1)) {
+								return false;
+							}
+
+							index += 1;
+
+							$comic.data('index', index);
+
+							next.removeAttr('disabled').css({ 'cursor': '', 'color': '' });
+
+							img.attr('src', '/api/images/' + comics[index].recommendedFileName);
+							img.attr('title', comics[index].title);
+							date.text(new Date(comics[index].downloadedDate).toLocaleDateString());
+
+							if (index == (comics.length - 1)) {
+								$this.attr('disabled', 'disabled').css({ 'cursor': 'default', 'color': 'black' });
+							}
+
+							return false;
+						});
+
+						$(".comic .topLine .next").click(function (e) {
+							var $this = $(this);
+							var $comic = $this.closest(".comic");
+
+							var img = $comic.find('img');
+							var previous = $comic.find(".topLine .previous");
+							var date = $comic.find('.date');
+
+							var index = $comic.data('index');
+							var comics = $comic.data('comics');
+
+							if (index == 0) {
+								return false;
+							}
+
+							index -= 1;
+
+							$comic.data('index', index);
+
+							previous.removeAttr('disabled').css({ 'cursor': '', 'color': '' });
+
+							img.attr('src', '/api/images/' + comics[index].recommendedFileName);
+							img.attr('title', comics[index].title);
+							date.text(new Date(comics[index].downloadedDate).toLocaleDateString());
+
+							if (index == 0) {
+								$this.attr('disabled', 'disabled').css({ 'cursor': 'default', 'color': 'black' });
+							}
+
+							return false;
+						});
+
+						$("#column_4 > .iGadgetBox").css({'display': 'inline-block', 'padding': '10px'}).draggable();
+						$("#column_4").imagesLoaded(function() {
+							$("#column_4").packery({
+								itemSelector: '.iGadgetBox',
+								gutter: 10
+							});
+							$("#column_4").packery('bindUIDraggableEvents', $("#column_4 > .iGadgetBox"));
+						});
+					})
+				});
+
+				function render(array, templateName, name, id) {
+					var data = array.find(function(e) { return e.name == name });
+					data['content'] = function() {
+						return Mustache.render($("#" + templateName).html(), this);
+					};
+					document.getElementById(id).innerHTML = Mustache.render($("#iGadgetBox").html(), data);
+				}
+			</script>
+			<style>
+					canvas {
+						-moz-user-select: none;
+						-webkit-user-select: none;
+						-ms-user-select: none;
+					}
+
+					body {
+						background-image: url('');
+						background-repeat: no-repeat;
+						background-attachment: fixed;
+						-webkit-background-size: cover;
+						-moz-background-size: cover;
+						-o-background-size: cover;
+						background-size: cover;
+						filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='', sizingMethod='scale');
+						-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='', sizingMethod='scale')";
+					}
+
+					.iGadgetBox {
+						margin-bottom: 20px;
+						display: block;
+					}
+
+					.iGadgetBox .iGadgetBoxTitle {
+						background-color: #F7F7F7;
+						border-bottom: 1px solid #DCDCDC;
+						font: 13px arial,sans-serif;
+						font-weight: bold;
+						height: 28px;
+						line-height: 28px;
+						position: relative;
+						color: #111111;
+						overflow: hidden;
+						padding-top: 3px;
+						padding-right: 7px !important;
+						padding-bottom: 0px;
+						padding-left: 7px;
+						text-decoration: none;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+					.iGadgetBox .iGadgetBoxTitle .iGadgetBoxTitleText a {
+						float: left;
+						cursor: pointer;
+						color: #111111;
+					}
+
+					.iGadgetBox .iGadgetBoxTitle .iGadgetBoxTitleText a:active, 
+					.iGadgetBox .iGadgetBoxTitle .iGadgetBoxTitleText a:visited, 
+					.iGadgetBox .iGadgetBoxTitle .iGadgetBoxTitleText a:link {
+						text-decoration: none;
+					}
+
+					.iGadgetBox .iGadgetBoxTitle .iGadgetBoxTitleText a:hover {
+						text-decoration: underline;
+					}
+
+					.iGadgetBox .iGadgetBoxContent {
+						background-color: #FFFFFF;
+						width: 100%;
+						position: relative;
+						margin: 0;
+						overflow: hidden;
+						padding: 4px 0 0;
+						
+					}
+
+					.rssFeed {
+						padding: 7px;
+					}
+
+					.rssFeed .rssEntry {
+						margin: 0 2px;
+						max-width: 98%;
+						padding: 3px 0 2px;
+						width: 98%;
+					}
+
+					.rssFeed .rssItemTitle {
+						color: rgb(0, 0, 238);
+					}
+					
+					.rssFeed .rssEntry .rssHeadline a {
+						font: 13px arial,sans-serif;
+						font-weight: 400;
+						line-height: 15.433px;
+						text-decoration: none;
+						padding-left: 10px;
+						padding-right: 4px;
+					}
+
+					.rssFeed .rssEntry .rssHeadline .rssExpand {
+						float: left;
+						left: 0;
+						vertical-align: top;
+						display: block;
+						color: #1155CC;
+						margin-left: 0;
+						margin-top: 2px;
+						overflow: hidden;
+						padding: 0;
+						height: 12px;
+						width: 8px;
+						background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAYAAADwdn+XAAAAPklEQVQoU2OIjIz8DwQMuDBIHhcGyTMgc0gxBCbHgE2QkCHI4himEzIEXYxoF+DCRIUBQQMIKcJrACEFhDAAXEFgMLX4/d0AAAAASUVORK5CYII=");
+						background-repeat: no-repeat;
+						text-decoration: none;
+						cursor: none;
+					}
+
+					.weatherConditions {
+						font: 13px arial,sans-serif;
+						margin: 10px;
+					}
+
+					.weatherConditions_current {
+						padding: 2px;
+					}
+
+					.weatherConditions_current_img {
+						width: 60px;
+						height: 60px;
+						float: left;
+						padding: 1px;
+					}
+
+					.weatherConditions_current_temp {
+						float: left;
+						font-size: 180%;
+						padding: 0 10px 0 5px;
+					}
+
+					.weatherConditions_current_text {
+						overflow: hidden;
+					}
+
+					.weatherConditions_location_link {
+						font: 13px arial,sans-serif;
+						font-weight: 400;
+						line-height: 15.433px;
+						text-decoration: none;
+						padding-left: 0px;
+						font-weight: bold;
+						padding-right: 4px;
+					}
+
+					.weatherConditions_forecast {
+						height: 77px;
+					
+						padding: 2px 0 0;
+					}
+
+					.weatherConditions_forecast_time {
+						float: left;
+						padding: 0 10px 0 0;
+						text-align: center;
+					}
+
+					.weatherConditions_forecast_image {
+						width: 43px;
+						height: 43px;
+						display: block;
+					}
+
+					.weatherConditions_forecast_temp {
+						font: 13px arial,sans-serif;
+					}
+			</style>
+			<script id="iGadgetBox" type="x-tmpl-mustache">
+				<div class="iGadgetBoxTitle">
+					<div class="iGadgetBoxTitleText" style="float: left;">
+						{{#url}}
+							<a href="{{url}}" target="_blank">{{name}}</a>
+						{{/url}}
+						{{^url}}
+							<span>{{name}}</span>
+						{{/url}}
+					</div>
+				</div>
+				<div class="iGadgetBoxContent">
+					{{{content}}}
+				</div>
+			</script>
+
+			<script id="rssFeed" type="x-tmpl-mustache">
+				<div class="rssFeed">
+					{{#items}}
+						<div class="rssEntry">
+							<div class="rssHeadline">
+								<span class="rssExpand maxBox"></span>
+								<a class="rssItemTitle" href="{{link}}" target="_blank">{{{title}}}</a>
+							</div>
+						</div>
+					{{/items}}
+				</div>
+			</script>
+
+			<script id="nwsForecast" type="x-tmpl-mustache">
+				<div class="weatherConditions">
+					<div class="weatherConditions_current">
+						<img alt="{{textDescription}}" src="{{{icon}}}"  title="{{textDescription}}" class="weatherConditions_current_img" />
+						<div class="weatherConditions_current_temp">{{temp}} &deg;</div>
+						<div class="weatherConditions_current_text">
+							<span style="display: block;">
+								Current: <span class="conditions">{{textDescription}}</span>
+							</span>
+							{{#windSpeed}}
+								<span style="display: block;">
+									Wind: <span class="wind">{{windSpeed}} mph from the {{windDirection}}</span>
+								</span>
+							{{/windSpeed}}
+							{{^windSpeed}}
+								<span style="display: block;">
+									Wind: None
+								</span>
+							{{/windSpeed}}
+							<span style="display: block;">
+								Humidity: <span class="humidity">{{humidity}}%</span>
+							</span>
+							<span style="display: block;">
+								Observation Time: <span class="asof">{{asOf}}</span>
+							</span>
+							<span style="display: block;">
+								Last Check: <span class="asof">{{requested}}</span>
+							</span>
+						</div>
+					</div>
+					<br />
+					<div style="width:100%; margin: 10px;" class="weatherConditions_forecast">
+						{{#forecasts}}
+							<div class="weatherConditions_forecast_time">
+								<img class="weatherConditions_forecast_image" src="{{iconURL}}" alt="{{detailedForecast}}" title="{{name}}: {{detailedForecast}}"/>
+								<nobr class="weatherConditions_forecast_temp" style="color: {{#isDaytime}}red{{/isDaytime}}{{^isDaytime}}blue{{/isDaytime}} ">
+								{{temperature}} &deg;
+								</nobr>
+							</div>
+						{{/forecasts}}
+					</div>
+				</div>				
+			</script>
+
+			<script id="comic" type="x-tmpl-mustache">
+				<div class="comic">
+					<div class="topline">
+						<div style="padding-left: 5px; margin-left: 3px; min-width: 30%; display: inline-block; font: 13px arial,sans-serif; font-weight: 400; line-height: 15.433px; float: left;" class="prevLink">
+							<a href="#" style="float: left; text-decoration: none; color: black; cursor: default;" disabled="disabled" class="previous">Previous</a>
+						</div>
+						<div style="min-width: 33%; display: inline-block; text-align: center; font: 13px arial,sans-serif; font-weight: 400; line-height: 15.433px;" class="date">{{date}}</div>
+						<div style="padding-right: 5px; margin-right: 3px; min-width: 30%; display: inline-block; font: 13px arial,sans-serif; font-weight: 400; line-height: 15.433px; float: right;" class="nextLink">
+							<a href="#" style="float: right; text-decoration: none; color: black; cursor: default;" disabled="disabled" class="next">Next</a>
+						</div>
+					</div>
+					<div style="text-align: center; vertical-align: middle;">
+						<img class="image image-responsive" title="{{title}}" alt="{{alt}}" style="margin: 5px; max-width: 1050px;" src="{{src}}" />
+					</div>
+				</div>
+			</script>
+	</head>
+	<body>
+		<div class="page-header" style="min-height: 90px"></div>
+		<div id="shell" style="padding: 10px;">
+			<div class="row">
+				<div class="col-12 col-sm-12 col-md-4 col-lg-4" id="column_1">
+					<div id="iGadgetBox1" class='iGadgetBox'></div>
+					<div id="iGadgetBox2" class='iGadgetBox'></div>
+					<div id="iGadgetBox3" class='iGadgetBox'></div>
+					<div id="iGadgetBox4" class='iGadgetBox'></div>
+					<div id="iGadgetBox5" class='iGadgetBox'></div>
+				</div>
+				<div class="col-12 col-sm-12 col-md-4 col-lg-4" id="column_2">
+					<div id="iGadgetBox6" class='iGadgetBox'></div>
+					<div id="iGadgetBox7" class='iGadgetBox'></div>
+					<div id="iGadgetBox8" class='iGadgetBox'></div>
+					<div id="iGadgetBox9" class='iGadgetBox'></div>
+					<div id="iGadgetBox10" class='iGadgetBox'></div>
+				</div>
+				<div class="col-12 col-sm-12 col-md-4 col-lg-4" id="column_3">
+					<div id="iGadgetBox11" class='iGadgetBox'></div>
+					<div id="iGadgetBox12" class='iGadgetBox'></div>
+					<div id="iGadgetBox13" class='iGadgetBox'></div>
+					<div id="iGadgetBox14" class='iGadgetBox'></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 col-sm-12 col-md-12 col-lg-12" id="column_4"></div>
+			</div>
+		</div>
+	</body>
+</html>

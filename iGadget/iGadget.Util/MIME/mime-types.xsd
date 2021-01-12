@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="mime-types">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="unbounded" ref="mime-type" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mime-type">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="ext" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="magic" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="description" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ext" type="xs:string" />
+	<xs:element name="magic">
+		<xs:complexType>
+			<xs:attribute name="offset" type="xs:string" use="required" />
+			<xs:attribute default="string" name="type">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="byte" />
+						<xs:enumeration value="string" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="value" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

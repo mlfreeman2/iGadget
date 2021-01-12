@@ -1,0 +1,66 @@
+{
+    "Comics": [
+        {
+            "Name": "Calvin and Hobbes",
+            "URL": "http://www.gocomics.com/calvinandhobbes/",
+            "Selector": "picture.gc-card__image--cropped-strip img.img-fluid.lazyload",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Ctrl+Alt+Del",
+            "URL": "http://www.cad-comic.com/",
+            "Selector": "img.comic-display",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Dilbert",
+            "URL": "http://www.dilbert.com",
+            "Selector": "a.img-comic-link > img.img-comic",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "GPF",
+            "URL": "http://www.gpf-comics.com",
+            "Selector": ".content .strip_header ~ p > img",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Garfield",
+            "URL": "http://www.gocomics.com/garfield/",
+            "Selector": "picture.gc-card__image--cropped-strip img.img-fluid.lazyload",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Get Fuzzy",
+            "URL": "http://www.gocomics.com/getfuzzy/",
+            "Selector": "picture.gc-card__image--cropped-strip img.img-fluid.lazyload",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Pearls Before Swine",
+            "URL": "http://www.gocomics.com/pearlsbeforeswine/",
+            "Selector": "picture.gc-card__image--cropped-strip img.img-fluid.lazyload",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Penny Arcade",
+            "URL": "http://www.penny-arcade.com/comic/",
+            "Selector": "#comicFrame img",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "XKCD",
+            "URL": "http://www.xkcd.com",
+            "Selector": "#comic > img",
+            "Schedule": "0 */3 * * *"
+        },
+        {
+            "Name": "Foxtrot",
+            "URL": "https://foxtrot.com",
+            "Before": "^(.*)-318x149(.*)$",
+            "After": "$1$2",
+            "Selector": ".entry img",
+            "Schedule": "0 */3 * * *"
+        }
+    ]
+}

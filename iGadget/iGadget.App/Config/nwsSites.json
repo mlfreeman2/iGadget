@@ -1,0 +1,15 @@
+{
+    "NationalWeatherService": {
+        "APIServer": "https://api.weather.gov",
+        "Sites": [
+            {
+                "Name": "Jacksonville",
+                "URL": "https://forecast.weather.gov/MapClick.php?lon=-81.64077758789061&lat=30.150015897212654",
+                "Lat": 30.15,
+                "Lon": -81.6407,
+                "ForecastSchedule": "0 */6 * * *",
+                "ObservationSchedule": "0 * * * *"
+            },
+        ]
+    }
+}

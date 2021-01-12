@@ -1,0 +1,16 @@
+{
+    "PublixAds": {
+        "GraphQLServer": "https://graphql-cdn-slplatform.liquidus.net/",
+        "StoreInfoUrl": "https://services.publix.com/api/v1/storelocation?types=R,G,H,N,S&option=&count=15&includeOpenAndCloseDates=true&zipCode={0}",
+        "EMailFrom": "not@leaking.this",
+        "Stores": [
+            {
+                "ZIPCode": 32223,
+                "Schedule": "0 6 * * *",
+                "Recipients": [
+                    "test@example.com"
+                ]
+            }
+        ]
+    }
+}

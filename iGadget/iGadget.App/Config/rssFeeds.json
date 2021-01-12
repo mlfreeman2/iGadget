@@ -1,0 +1,88 @@
+{
+    "RSSFeeds": [
+        {
+            "Name": "Hacker News",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://news.ycombinator.com/rss",
+            "Count": 5,
+            "Site": "https://news.ycombinator.com/"
+        },
+        {
+            "Name": "Engadget",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://www.engadget.com/rss.xml",
+            "Count": 5,
+            "Site": "https://www.engadget.com/"
+        },
+        {
+            "Name": "Slashdot",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "http://rss.slashdot.org/Slashdot/slashdotatom",
+            "Count": 5,
+            "Site": "https://www.slashdot.org/"
+        },
+        {
+            "Name": "Wired",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://www.wired.com/feed/rss",
+            "Count": 3,
+            "Site": "https://www.wired.com/"
+        },
+        {
+            "Name": "The Register",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://www.theregister.co.uk/headlines.rss",
+            "Count": 3,
+            "Site": "https://www.theregister.co.uk/"
+        },
+        {
+            "Name": "Fark",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://www.fark.com/fark.rss",
+            "Count": 3,
+            "Site": "https://www.fark.com/"
+        },
+        {
+            "Name": "Ars Technica",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://feeds.feedburner.com/arstechnica/index/?format=xml",
+            "Count": 3,
+            "Site": "https://www.arstechnica.com/"
+        },
+        {
+            "Name": "NPR",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://www.npr.org/rss/rss.php?id=1001",
+            "Count": 3,
+            "Site": "https://www.npr.org/"
+        },
+        {
+            "Name": "Fox News",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "http://feeds.foxnews.com/foxnews/latest?format=xml",
+            "Count": 3,
+            "Site": "https://www.foxnews.com/"
+        },
+        {
+            "Name": "Marketwatch",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "http://feeds.marketwatch.com/marketwatch/topstories/?format=xml",
+            "Count": 3,
+            "Site": "https://www.marketwatch.com/"
+        },
+        {
+            "Name": "NHC - Atlantic",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://www.nhc.noaa.gov/index-at.xml",
+            "Count": 5,
+            "Site": "https://www.nhc.noaa.gov/"
+        },
+        {
+            "Name": "Zerohedge",
+            "CronSchedule": "0,30 * * * *",
+            "URL": "https://feeds.feedburner.com/zerohedge/feed",
+            "Count": 3,
+            "Site": "https://www.zerohedge.com/"
+        }
+    ]
+}

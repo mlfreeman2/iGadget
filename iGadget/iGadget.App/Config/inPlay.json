@@ -1,0 +1,11 @@
+{
+    "InPlay": {
+        "URL": "http://hosting.briefing.com/cschwab/InDepth/InPlay.htm",
+        "Schedule": "30 23 * * 1,2,3,4,5",
+        "Selector": "#Content",
+        "EMailFrom": "not@leaking.this",
+        "Recipients": [
+            "test@example.com"
+        ]
+    }
+}
